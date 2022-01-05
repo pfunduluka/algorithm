@@ -3,6 +3,16 @@
 class Variable:
     def __init__(self, value:str):
         self.value=value
+    
+    def evaluation(self):
+        try:
+            a = float(self.value)
+        except Exception as e:
+            print(e)
+            return None
+        else:
+            return a
+        
     def add(self,item):
         a = Expression("+")
         a.lhs=self
@@ -15,24 +25,48 @@ class Expression:
         self.operator=operator
         self.rhs=rhs
     
+    def _operation(self, lhs, rhs):
+        if lhs != None and rhs != None:
+            if self.operator == "+":
+                return lhs+rhs
+            elif self.operator == "-":
+                return lhs-rhs
+            elif self.operator == "x":
+                return lhs*rhs
+            elif self.operator == "/":
+                return lhs/rhs
+            else:
+                return None
+        else:
+            return None
+    
+    def evaluation(self):
+        a = self.lhs.evaluation()
+        b = self.rhs.evaluation()
+    
+        return self._operation(a,b)
+    
     def toString(self):
         view = str()
 
-        if type(self.lhs) == Variable:
-            view = self.lhs.value
-        elif type(self.lhs) == Expression:
-            view = f"({self.lhs.toString()})"
-        else:
-            return None
+        if self.evaluation() == None:
+            if type(self.lhs) == Variable:
+                view = self.lhs.value
+            elif type(self.lhs) == Expression:
+                view = f"({self.lhs.toString()})"
+            else:
+                return None
 
-        view += self.operator
-        
-        if type(self.rhs) == Variable:
-            view += self.rhs.value
-        elif type(self.lhs) == Expression:
-            view += f"({self.rhs.toString()})"
+            view += self.operator
+            
+            if type(self.rhs) == Variable:
+                view += self.rhs.value
+            elif type(self.lhs) == Expression:
+                view += f"({self.rhs.toString()})"
+            else:
+                return None
         else:
-            return None
+            view = str(self.evaluation())
 
         return view
     

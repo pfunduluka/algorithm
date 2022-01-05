@@ -1,12 +1,12 @@
 import ADT
 
 a = ADT.Variable("2")
-b = ADT.Variable("4")
+b = ADT.Variable("x")
 
 c = ADT.Expression("+",a,b)
 d = ADT.Expression("/",c,a)
 
-e = ADT.Variable("x")
+e = ADT.Variable("5")
 f = ADT.Equation("=",d,e)
 
 print(f)
