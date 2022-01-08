@@ -1,14 +1,12 @@
 import ADT
 
 a = ADT.Variable("2")
-b = ADT.Variable("x")
-e = ADT.Variable("5")
+b = ADT.Variable("10")
+c = ADT.Variable("x")
 
-c = ADT.Expression("/",e,b)
-d = ADT.Expression("*",c,a)
-d = ADT.Expression("/",a,d)
+d = ADT.Expression("/",b,c) #d=10*x
+e = ADT.Expression("/",d,a) #e=d/2
 
-e = ADT.Expression("*",e,a)
-f = ADT.Equation("=",d,e)
+f = ADT.Equation("=",e,b) #e=10
 
 print(f)

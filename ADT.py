@@ -115,11 +115,77 @@ class Expression:
                             self.lhs = self.lhs.lhs
                             self.rhs = new1
                             self.evaluation()
+
         elif self.operator == "/":
             if a != None and b == None:
-                pass
+                if type(self.rhs) == Expression:
+                    a1 = self.rhs.lhs.evaluation()
+                    b1 = self.rhs.rhs.evaluation()
+                    if self.rhs.operator == "*":
+                        if a1 != None:
+                            new1 = Expression("/",self.lhs,self.rhs.lhs)
+                            self.lhs = new1
+                            self.operator = "/"
+                            self.rhs = self.rhs.rhs
+                            self.evaluation()
+                            
+                        elif b1 != None:
+                            new1 = Expression("/",self.lhs,self.rhs.rhs)
+                            self.lhs = new1
+                            self.operator = "/"
+                            self.rhs = self.rhs.lhs
+                            self.evaluation()
+
+                    elif self.rhs.operator == "/":
+                        if a1 != None:
+                            new1 = Expression("/",self.lhs,self.rhs.lhs)
+                            self.lhs = new1
+                            self.operator = "*"
+                            self.rhs = self.rhs.rhs
+                            self.evaluation()
+                        
+                        elif b1 != None:
+                            new1 = Expression("*",self.lhs,self.rhs.rhs)
+                            self.lhs = new1
+                            self.operator = "/"
+                            self.rhs = self.rhs.lhs
+                            self.evaluation()
+
             elif a == None and b != None:
-                pass
+                if type(self.lhs) == Expression:
+                    a1 = self.lhs.lhs.evaluation()
+                    b1 = self.lhs.rhs.evaluation()
+                    if self.lhs.operator == "*":
+                        if a1 != None:
+                            new1 = Expression("/",self.lhs.lhs,self.rhs)
+                            c = self.lhs.rhs
+                            self.lhs = new1
+                            self.operator = "*"
+                            self.rhs = c
+                            self.evaluation()
+
+                        elif b1 != None:
+                            new1 = Expression("/",self.lhs.rhs,self.rhs)
+                            self.lhs = self.lhs.lhs
+                            self.operator = "*"
+                            self.rhs = new1
+                            self.evaluation()
+
+                    elif self.lhs.operator == "/":
+                        if a1 != None:
+                            new1 = Expression("/",self.lhs.lhs,self.rhs)
+                            c = self.lhs.rhs
+                            self.lhs = new1
+                            self.operator = "/"
+                            self.rhs = c
+                            self.evaluation()
+                            
+                        elif b1 != None:
+                            new1 = Expression("*",self.lhs.rhs,self.rhs)
+                            self.lhs = self.lhs.lhs
+                            self.operator = "/"
+                            self.rhs = new1
+                            self.evaluation()
         #"""
         return self._operation(a,b)
     
