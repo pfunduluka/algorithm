@@ -3,12 +3,12 @@
 class Variable:
     def __init__(self, value:str):
         self.value=value
+        self.power=None
     
     def evaluation(self):
         try:
             a = float(self.value)
         except Exception as e:
-            print(e)
             return None
         else:
             return a
@@ -26,15 +26,16 @@ class Variable:
         return a
         
     def add(self,item):
-        a = Expression("+")
-        a.lhs=self
-        a.rhs=item
+        a = Expression("+",self,item)
         return a
+    
+    def power(self,power):
+        self.power = power
 
     def __str__(self):
         return self.value
 
-class Expression:
+class Expression(Variable):
     def __init__(self, operator:str, lhs=None, rhs=None):
         self.lhs=lhs
         self.operator=operator
@@ -66,25 +67,22 @@ class Expression:
                     b1 = self.rhs.rhs.evaluation()
                     if self.rhs.operator == "*":
                         if a1 != None:
-                            new1 = Expression("*",self.lhs,self.rhs.lhs)
-                            self.lhs = new1
+                            self.lhs = self.lhs.multiply(self.rhs.lhs)
                             self.rhs = self.rhs.rhs
                             self.evaluation()
                         elif b1 != None:
-                            new1 = Expression("*",self.lhs,self.rhs.rhs)
                             self.lhs = self.rhs.lhs
-                            self.rhs = new1
+                            self.rhs = self.lhs.multiply(self.rhs.rhs)
                             self.evaluation()
                     if self.rhs.operator == "/":
                         if a1 != None:
-                            new1 = Expression("*",self.lhs,self.rhs.lhs)
-                            self.lhs = new1
+                            self.lhs = self.lhs.multiply(self.rhs.lhs)
                             self.rhs = self.rhs.rhs
                             self.operator = "/"
+                            self.evaluation()
                         elif b1 != None:
-                            new1 = Expression("/",self.lhs,self.rhs.rhs)
                             self.lhs = self.rhs.lhs
-                            self.rhs = new1
+                            self.rhs = self.lhs.divide(self.rhs.rhs)
                             self.evaluation()
             elif a == None and b != None:
                 if type(self.lhs) == Expression:
@@ -93,8 +91,7 @@ class Expression:
                     if self.lhs.operator == "*":
                         if a1 != None:
                             c = self.lhs.rhs
-                            new1 = Expression("*",self.lhs.lhs,self.rhs)
-                            self.lhs = new1
+                            self.lhs = self.lhs.lhs.multiply(self.rhs)
                             self.rhs = c
                             self.evaluation()
                         elif b1 != None:
@@ -179,7 +176,7 @@ class Expression:
                             self.operator = "/"
                             self.rhs = c
                             self.evaluation()
-                            
+
                         elif b1 != None:
                             new1 = Expression("*",self.lhs.rhs,self.rhs)
                             self.lhs = self.lhs.lhs
